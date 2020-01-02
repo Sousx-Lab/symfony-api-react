@@ -6,11 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource
+ * @UniqueEntity("email", message="L'adresse email est déja utilisée")
  */
 class User implements UserInterface
 {
@@ -18,11 +22,15 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource"})
      */
     private $id;
 
     /**
+     * @Assert\NotBlank(message="L'email du l'utilisateur est obligatoire")
+     * @Assert\Email(message="L'email {{ value }} n'est pas un email valide")
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource"})
      */
     private $email;
 
@@ -32,18 +40,27 @@ class User implements UserInterface
     private $roles = [];
 
     /**
+     * @Assert\NotBlank(message="Le mot de passe est obligatoire")
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $password;
 
     /**
+     * @Assert\NotBlank(message="Le prénom de l'utilisateur est obligatoire")
+     * @Assert\Length(min=3, minMessage="Le prénom doit faire entre 3 et 255 caractères", 
+     * max=255, maxMessage="Le prénom doit faire entre 3 et 255 caractères")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource"})
      */
     private $firstName;
 
     /**
+     * @Assert\NotBlank(message="Le nom de famille du l'utilisateur est obligatoire")
+     * @Assert\Length(min=3, minMessage="Le nom de famille doit faire entre 3 et 255 caractères", 
+     * max=255, maxMessage="Le nom de famille doit faire entre 3 et 255 caractères")
      * @ORM\Column(type="string", length=255)
+     * @Groups({"customers_read", "invoices_read", "invoices_subresource"})
      */
     private $lastName;
 
