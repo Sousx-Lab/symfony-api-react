@@ -92,7 +92,7 @@ class Customer
     public function getTotalAmount(): float
     {
         return array_reduce($this->invoices->toArray(), function($total, $invoice){
-            return round($total + $invoice->getAmount(), 2);
+            return $total + $invoice->getAmount();
         }, 0);
     }
 
@@ -104,8 +104,8 @@ class Customer
     public function getUnpaidAmount(): float
     {
         return array_reduce($this->invoices->toArray(), function($total, $invoice){
-            return round($total + ($invoice->getStatus() === "PAID" || $invoice->getStatus() === "CANCELLED" ? 0 : 
-            $invoice->getAmount()), 2);
+            return $total + ($invoice->getStatus() === "PAID" || $invoice->getStatus() === "CANCELLED" ? 0 : 
+            $invoice->getAmount());
         },0);
     }
 
