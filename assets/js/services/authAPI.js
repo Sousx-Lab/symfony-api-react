@@ -35,7 +35,7 @@ function setAxiosToken(token){
 }
 
 /**
- * Get if token exist on start the App
+ * Get token if exist on start the App
  */
 function setUp(){
     const token = window.localStorage.getItem("authToken");

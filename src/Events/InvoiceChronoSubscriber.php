@@ -21,6 +21,7 @@ class InvoiceChronoSubscriber implements EventSubscriberInterface
         $this->security = $security;
         $this->repository = $repository;
     }
+    
     public static function getSubscribedEvents()
     {
         return [

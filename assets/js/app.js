@@ -9,6 +9,9 @@ import LoginPage from "./pages/LoginPage";
 import AuthAPI from "./services/authAPI";
 import AuthContext from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute"
+import CustomerPage from "./pages/CustomerPage";
+import InvoicePage from "./pages/InvoicePage";
+import RegisterPage from "./pages/RegisterPage";
 
 require("../css/app.css");
 
@@ -27,7 +30,10 @@ const App = () => {
       <main className="container mt-4">
         <Switch>
           <Route path="/login" component={LoginPage} />
+          <Route path="/register" component={RegisterPage} />
+          <ProtectedRoute path="/facture/:id" component={InvoicePage} />
           <ProtectedRoute path="/factures" component={InvoicesPage} />
+          <ProtectedRoute path="/client/:id" component={CustomerPage} />
           <ProtectedRoute path="/clients" component={CustomersPage} />
           <Route path="/" component={HomePage} />
         </Switch>

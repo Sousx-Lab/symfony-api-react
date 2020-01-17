@@ -49,18 +49,25 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @Assert\NotBlank(message="Le prénom de l'utilisateur est obligatoire")
+     * @var string
+     * @Assert\EqualTo(propertyPath="password", message="Veuillez confirmer le même mot de passe")
+     * @Assert\NotBlank(message="Veuillez confirmer le mot de passe")
+     */
+    private $passwordConfirm;
+
+    /**
      * @Assert\Length(min=3, minMessage="Le prénom doit faire entre 3 et 255 caractères", 
      * max=255, maxMessage="Le prénom doit faire entre 3 et 255 caractères")
+     * @Assert\NotBlank(message="Le prénom de l'utilisateur est obligatoire")
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
     private $firstName;
 
     /**
-     * @Assert\NotBlank(message="Le nom de famille du l'utilisateur est obligatoire")
      * @Assert\Length(min=3, minMessage="Le nom de famille doit faire entre 3 et 255 caractères", 
      * max=255, maxMessage="Le nom de famille doit faire entre 3 et 255 caractères")
+     * @Assert\NotBlank(message="Le nom de famille du l'utilisateur est obligatoire")
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers_read", "invoices_read", "invoices_subresource", "users_read"})
      */
@@ -135,6 +142,16 @@ class User implements UserInterface
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getPasswordConfirm()
+    {
+        return $this->passwordConfirm;
+    }
+
+    public function setPasswordConfirm(string $passwordConfirm)
+    {
+        $this->passwordConfirm = $passwordConfirm;
     }
 
     /**
