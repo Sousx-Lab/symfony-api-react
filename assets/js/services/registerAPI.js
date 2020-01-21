@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-function create(user){
+function register(user){
     return axios
            .post("http://symreact.local/api/users", user);
 }
 
 export default{
-    create
+    register
 };

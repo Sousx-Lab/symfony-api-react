@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Field from "../components/forms/Field";
 import { Link } from 'react-router-dom';
-import axios from "axios";
 import registerAPI from '../services/registerAPI';
+import { toast } from 'react-toastify';
 
 const RegisterPage = ({ history }) => {
 
@@ -30,8 +30,8 @@ const RegisterPage = ({ history }) => {
     const handleSubmit = async event =>{
         event.preventDefault()
         try {
-            await registerAPI.create(user)
-            //TODO : flash success
+            await registerAPI.register(user)
+            toast.success("Votre compte à bien été crée !");
             history.replace("/login");
             
         } catch (error) {
@@ -42,6 +42,7 @@ const RegisterPage = ({ history }) => {
                     apiErrors[propertyPath] = message
                 });
                 setErrors(apiErrors);
+                toast.error("Des erreurs dans votre formulaire ")
             }
         }
     }

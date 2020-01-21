@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthAPI from "../services/authAPI";
 import AuthContext from "../contexts/AuthContext";
-import Filed from '../components/forms/Field';
+import Field from '../components/forms/Field';
+import { toast } from 'react-toastify';
 
-const LoginPage = ({ history }) => {
+const LoginPage = ({ history, user }) => {
 
     const { setIsAuthenticated } = useContext(AuthContext);
     const [credentials, setCredentials] = useState({
@@ -21,17 +22,19 @@ const LoginPage = ({ history }) => {
         event.preventDefault();
         try {
             await AuthAPI.authenticate(credentials);
-            setIsAuthenticated(true)
-            history.push("/clients");
+            setIsAuthenticated(true);
+            toast.info("Bonjour  " + user.firstname + " 🤗 ");
+            history.replace("/clients");
         } catch (error) {
             setError("L'adresse email ou le mot de passe incorrect");
+            toast.error("Une erreur est survenue !")
         }
     }
     return (
         <>
             <h3 className="text-center">Connexion</h3>
             <form onSubmit={handleSubmit}>
-                <Filed 
+                <Field 
                 type="email" 
                  name="username" 
                   label="Adresse Email" 
@@ -41,7 +44,7 @@ const LoginPage = ({ history }) => {
                         error={error} 
                 />
 
-                <Filed 
+                <Field 
                 type="password" 
                  name="password" 
                   label="Mots de passe" 

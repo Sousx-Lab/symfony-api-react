@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Pagination from '../components/Pagination';
 import InvoicesAPI from '../services/invoicesAPI';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import TableLoader from '../components/loaders/TableLoader';
 
 const STATUS_CLASSES = {
     PAID: "success",
@@ -20,14 +22,16 @@ const InvoicesPage = (props) => {
     const [invoices, setInvoices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
 
     // Get Invoices //
     const fetchInvoices = async () => {
         try {
           const data = await InvoicesAPI.findAll()
           setInvoices(data);
+          setLoading(false);
         } catch(error) {
-            console.log(error.response);
+            toast.error("Erruer lors du chargement des factures !");
         }
     };
     useEffect(() => {
@@ -37,13 +41,14 @@ const InvoicesPage = (props) => {
 
     const handelDelete = async id => {
         const originalInvoices = [...invoices];
+
         setInvoices(invoices.filter(invoice => invoice.id !== id));
         try {
            await InvoicesAPI.delete(id)
+           toast.success("La facture N° " + id + " à bien été supprimée !");
         } catch (error) {
             setInvoices(originalInvoices)
-            console.log(error.response);
-            
+            toast.error("Une erreur est survenue");
         }
     };
 
@@ -95,6 +100,7 @@ const InvoicesPage = (props) => {
                     <td className="text-center">Action</td>
                 </tr>
             </thead>
+            {!loading && (
             <tbody>
             {paginatedInvoices.map(invoice => (
                   <tr key={invoice.id}>
@@ -115,7 +121,9 @@ const InvoicesPage = (props) => {
                 </tr>
                 ))}
             </tbody>
+            )}
         </table>
+        {loading && <TableLoader />}
         {itemsPerPage < filtredInvoices.length &&
         <Pagination 
         currentPage={currentPage} 

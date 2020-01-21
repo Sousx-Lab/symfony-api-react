@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom"; //Router
 import AuthAPI from "../services/authAPI";
 import AuthContext from "../contexts/AuthContext";
+import { toast } from "react-toastify";
 
-const Navbar = ({ history }) => {
-
+const Navbar = ({ history, user }) => {
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
-
   const handleLogout = () =>{
     AuthAPI.logout();
     setIsAuthenticated(false);
+    toast.info("Vous êtes désormais déconnécté ✋")
     history.push("/login");
   }
 
@@ -58,11 +58,16 @@ const Navbar = ({ history }) => {
           </li>
           </>
         )) || (
+          <>
+         <li className="nav-item mr-2 mt-2">
+             Bonjour <strong>{user.firstname}</strong>
+         </li>
           <li className="nav-item">
             <button onClick={handleLogout} className="btn btn-danger">
               Déconnexion !
             </button>
           </li>
+          </>
         )}
         </ul>
       </div>

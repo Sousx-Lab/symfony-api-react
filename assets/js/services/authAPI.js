@@ -1,7 +1,6 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 
-
 /**
  * Logout delete token from LocalStorage & axios defaults headers
  */
@@ -35,17 +34,18 @@ function setAxiosToken(token){
 }
 
 /**
- * Get token if exist on start the App
+ * Get token if exist on start App
  */
 function setUp(){
     const token = window.localStorage.getItem("authToken");
     if(token){
         const jwtData = jwtDecode(token)
         if(jwtData.exp * 1000 > new Date().getTime()){
-            setAxiosToken(token);
-            return jwtData;
-        } 
-    }
+             setAxiosToken(token);
+             const user = ({firstname: jwtData.firstname, lastname: jwtData.lastname}); 
+             return user;
+           }
+        }
 }
 
 /**

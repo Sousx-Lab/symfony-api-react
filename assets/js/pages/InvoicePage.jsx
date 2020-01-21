@@ -4,28 +4,26 @@ import Field from '../components/forms/Field';
 import Select from '../components/forms/select';
 import CustomersAPI from "../services/customersAPI";
 import InvoicesAPI from "../services/invoicesAPI";
-import axios from "axios";
+import { toast } from 'react-toastify';
+import FormsRowLoader from '../components/loaders/FormsRowLoader';
 
 
 const InvoicePage = ({ match, history }) => {
     const {id = "new"} = match.params;
-
     const [invoice , setInvoice] = useState({
         amount: "",
         status: "",
         customer: ""
 
     });
-
     const [customers, setCustomers] = useState([]);
-
+    const [editing, setEditing] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [errors, setErrors] = useState({
         amount: "",
         status: "",
         customer: ""
     });
-
-    const [editing, setEditing] = useState(false);
 
     //Récupération de la liste des clients
     const fetchCustomers = async () => {
@@ -33,8 +31,8 @@ const InvoicePage = ({ match, history }) => {
             const data = await CustomersAPI.findAll();
             setCustomers(data);
         } catch (error) {
+            toast.error("Une erreur est survenu lors du chargement des clients !")
             history.replace('/factures');
-            //TODO : notification client non trouvé
         }
     }
 
@@ -42,9 +40,10 @@ const InvoicePage = ({ match, history }) => {
     const fetchInvoice = async id => {
         try {
             const { amount, status, customer } = await InvoicesAPI.find(id)
-            setInvoice({ amount, status, customer: customer.id });     
+            setInvoice({ amount, status, customer: customer.id });
+            setLoading(false);  
         } catch (error) {
-            //TODO : falsh notification invoice non trouvé 
+            toast.error("Une erreur est survenu lors du chargement de la facture !");
             history.replace('/factures');
         }
     };
@@ -79,10 +78,10 @@ const InvoicePage = ({ match, history }) => {
         try {
            if(editing){
                await InvoicesAPI.update(id, invoice);
-               //TODO: flash notification success
+               toast.success("La facture à bien été modifiée")
            } else {
                await InvoicesAPI.create(invoice);
-           //TODO : flash notification succes
+               toast.success("La facture à bien été crée")
                history.replace("/factures");
           }  
         } catch (error) {
@@ -93,7 +92,7 @@ const InvoicePage = ({ match, history }) => {
                     apiErrors[propertyPath] = message;
                 });
                 setErrors(apiErrors)
-                //TODO : flash notification error
+                toast.error("Des erreurs dans le formulaire !");
             }
         }
     };
@@ -101,6 +100,8 @@ const InvoicePage = ({ match, history }) => {
     return (
     <> 
      <h1 className="mb-4"> {!editing && "Créer une nouvelle facture" || "Modification de la facture"}</h1>
+     {loading && <FormsRowLoader />}
+     {!loading && (
         <form onSubmit={handleSubmit}>
             <Field 
              name="amount"
@@ -145,6 +146,7 @@ const InvoicePage = ({ match, history }) => {
                     <Link className="ml-2 btn btn-danger" to="/factures">Annuler</Link>
                 </div> 
             </form>
+            )}
          </>
     );
 }

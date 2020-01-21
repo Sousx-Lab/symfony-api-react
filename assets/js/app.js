@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 import ReactDOM from "react-dom";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
@@ -12,24 +12,27 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import CustomerPage from "./pages/CustomerPage";
 import InvoicePage from "./pages/InvoicePage";
 import RegisterPage from "./pages/RegisterPage";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 require("../css/app.css");
 
-AuthAPI.setUp();
+const user = AuthAPI.setUp();
 
 const App = () => {
       const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
       const NavbarWhitRouter = withRouter(Navbar);
   
+
   return (
     <AuthContext.Provider value={{isAuthenticated,
         setIsAuthenticated}} >
     <HashRouter>
-      <NavbarWhitRouter />
+      <NavbarWhitRouter user={user} />
 
       <main className="container mt-4">
         <Switch>
-          <Route path="/login" component={LoginPage} />
+          <Route path="/login" component={(props) => <LoginPage {...props} user={user}/>}/>
           <Route path="/register" component={RegisterPage} />
           <ProtectedRoute path="/facture/:id" component={InvoicePage} />
           <ProtectedRoute path="/factures" component={InvoicesPage} />
@@ -39,6 +42,17 @@ const App = () => {
         </Switch>
       </main>
     </HashRouter>
+    <ToastContainer 
+      position="bottom-left"
+        autoClose={5000}
+         hideProgressBar={false}
+          newestOnTop
+           closeOnClick
+            rtl={false}
+             pauseOnVisibilityChange
+              draggable
+               pauseOnHover
+  />
     </AuthContext.Provider>
   );
 };
