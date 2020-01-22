@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import AuthAPI from "../services/authAPI";
 import AuthContext from "../contexts/AuthContext";
 import Field from '../components/forms/Field';
 import { toast } from 'react-toastify';
 
-const LoginPage = ({ history, user }) => {
+const LoginPage = ({ history, user}) => {
 
     const { setIsAuthenticated } = useContext(AuthContext);
     const [credentials, setCredentials] = useState({
@@ -21,7 +21,7 @@ const LoginPage = ({ history, user }) => {
     const handleSubmit = async event => {
         event.preventDefault();
         try {
-            await AuthAPI.authenticate(credentials);
+            await AuthAPI.authenticate(credentials)
             setIsAuthenticated(true);
             toast.info("Bonjour  " + user.firstname + " 🤗 ");
             history.replace("/clients");

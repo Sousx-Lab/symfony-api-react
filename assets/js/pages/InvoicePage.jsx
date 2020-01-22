@@ -30,6 +30,7 @@ const InvoicePage = ({ match, history }) => {
         try {
             const data = await CustomersAPI.findAll();
             setCustomers(data);
+            if(id === "new") setLoading(false);
         } catch (error) {
             toast.error("Une erreur est survenu lors du chargement des clients !")
             history.replace('/factures');

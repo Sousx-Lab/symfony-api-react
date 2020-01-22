@@ -13,16 +13,17 @@ import CustomerPage from "./pages/CustomerPage";
 import InvoicePage from "./pages/InvoicePage";
 import RegisterPage from "./pages/RegisterPage";
 import { ToastContainer } from "react-toastify";
+import logedUser from "./services/user";
 import 'react-toastify/dist/ReactToastify.css';
 
 require("../css/app.css");
 
-const user = AuthAPI.setUp();
+const user = logedUser.get();
 
 const App = () => {
       const [isAuthenticated, setIsAuthenticated] = useState(AuthAPI.isAuthenticated());
       const NavbarWhitRouter = withRouter(Navbar);
-  
+      
 
   return (
     <AuthContext.Provider value={{isAuthenticated,

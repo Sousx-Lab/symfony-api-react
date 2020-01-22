@@ -1,5 +1,8 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import User from "./user";
+import Cache from "./cache";
+import {LOGIN_API} from "./config";
 
 /**
  * Logout delete token from LocalStorage & axios defaults headers
@@ -7,6 +10,7 @@ import jwtDecode from "jwt-decode";
 function logout(){
     window.localStorage.removeItem("authToken");
     delete axios.defaults.headers["Authorization"];
+    Cache.invalidate("customers");
 }
 
 /**
@@ -15,13 +19,14 @@ function logout(){
  */
 function authenticate(credentials){
        return axios
-            .post("http://symreact.local/api/login_check", credentials)
+            .post(LOGIN_API, credentials)
             .then(response => response.data.token)
             .then(token => {
              // & set token in LocalStorage 
             window.localStorage.setItem("authToken", token);
             // Create a default Header Authorization with token
             setAxiosToken(token);
+            User.set(jwtDecode(token));
         });
             
     }
@@ -42,8 +47,8 @@ function setUp(){
         const jwtData = jwtDecode(token)
         if(jwtData.exp * 1000 > new Date().getTime()){
              setAxiosToken(token);
-             const user = ({firstname: jwtData.firstname, lastname: jwtData.lastname}); 
-             return user;
+             User.set(jwtData);
+             return true;
            }
         }
 }
