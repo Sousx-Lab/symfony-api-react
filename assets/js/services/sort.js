@@ -1,10 +1,10 @@
 let direction = "ASC";
 
-function desc(sortable){
+const desc = (sortable) => {
     return (a, b) => a[sortable] < b[sortable] ? -1 : a[sortable] > b[sortable] ? 1 : 0;
 }
 
-function asc(sortable){
+const asc = (sortable) => {
     return (a, b) =>  a[sortable] < b[sortable] ? 1 : a[sortable] > b[sortable] ? -1 : 0;
 }
 
