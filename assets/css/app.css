@@ -1,3 +1,9 @@
 body {
     background-color: white
 }
+
+.clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    display: inline-block;
+}

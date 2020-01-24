@@ -4,7 +4,7 @@ import CustomersAPI from "../services/customersAPI";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import TableLoader from "../components/loaders/TableLoader";
-
+import Sort from "../services/sort"
 
 const CustomersPage = props => {
 
@@ -48,8 +48,34 @@ const CustomersPage = props => {
     setSearch(currentTarget.value);
     setCurrentPage(1);
   }
-
   
+  // Sorted customers functions //
+  const originalCustomers = customers.slice(0);
+  const byFirstname = () => {
+    Sort.sortItems(originalCustomers, "firstname");
+    setCustomers(originalCustomers);
+  };
+  const byId = () =>{
+    Sort.sortItems(originalCustomers, "id");
+    setCustomers(originalCustomers);
+  };
+  const byInvoices = () =>{
+    Sort.sortItems(originalCustomers, "invoices");
+    setCustomers(originalCustomers);
+  }
+  const byTotal = () =>{
+    Sort.sortItems(originalCustomers, "totalAmount");
+    setCustomers(originalCustomers);
+  }
+  const byCompany = () =>{
+    Sort.sortItems(originalCustomers, "company");
+    setCustomers(originalCustomers);
+  }
+  const byEmail= () =>{
+    Sort.sortItems(originalCustomers, "email");
+    setCustomers(originalCustomers);
+  }
+  //////End of Sorted customers functions////
 
   // Search filter //
   const filtredCustomers = customers.filter(
@@ -58,7 +84,8 @@ const CustomersPage = props => {
         c.email.toLowerCase().includes(search.toLowerCase()) ||
         (c.company && c.company.toLowerCase().includes(search.toLowerCase()))
   );
-
+  
+  
   // Pagination //
   // Page changer //
   const handelePageChange = page => setCurrentPage(page);
@@ -82,13 +109,13 @@ const CustomersPage = props => {
       <table className="table table-hover">
         <thead>
           <tr>
-            <th>id.</th>
-            <th>Client</th>
-            <th>Email</th>
-            <th>Entreprise</th>
-            <th className="text-center">Factures</th>
-            <th className="text-center">Montant total</th>
-            <th></th>
+            <th><div className="clickable" onClick={() => byId()}>ID</div></th>  
+            <th><div className="clickable" onClick={() => byFirstname()}> Client</div></th>
+            <th><div className="clickable" onClick={() => byEmail()}> Email</div></th>
+            <th><div className="clickable" onClick={() => byCompany()}>Entreprise</div></th>  
+            <th className="text-center"><div className="clickable" onClick={() => byInvoices()}>Facture</div></th>
+            <th className="text-center"><div className="clickable" onClick={() => byTotal()}>Montant total</div></th>
+            <th className="text-center">Actions</th>
           </tr>
          </thead>
         {!loading && (
@@ -105,7 +132,7 @@ const CustomersPage = props => {
                 <span className="badge badge-primary">{customer.invoices.length}</span>
               </td>
               <td className="text-center">{customer.totalAmount.toLocaleString()} €</td>
-              <td>
+              <td className="text-center">
                 <button onClick={() => handleDelete(customer.id)}
                   disabled={customer.invoices.length > 0} className="btn btn-sm btn-danger">Supprimer</button>
               </td>

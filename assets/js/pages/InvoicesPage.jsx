@@ -4,6 +4,7 @@ import InvoicesAPI from '../services/invoicesAPI';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import TableLoader from '../components/loaders/TableLoader';
+import Sort from '../services/sort';
 
 const STATUS_CLASSES = {
     PAID: "success",
@@ -67,6 +68,25 @@ const InvoicesPage = (props) => {
     );
     //END /// 
 
+    // Sorted invoices functions //
+    const originalInvoices = invoices.slice(0);
+    const byChrono = () => {
+        Sort.sortItems(originalInvoices, "chrono");
+        setInvoices(originalInvoices);
+    };
+    const byDate = () => {
+        Sort.sortItems(originalInvoices, "sentAt");
+        setInvoices(originalInvoices);
+    };
+    const byStatus = () => {
+        Sort.sortItems(originalInvoices, "status");
+        setInvoices(originalInvoices);
+    };
+    const byAmount= () => {
+        Sort.sortItems(originalInvoices, "amount");
+        setInvoices(originalInvoices);
+    };
+    //////End of Sorted invoices functions///////
 
     //Pagination //
 
@@ -92,12 +112,12 @@ const InvoicesPage = (props) => {
         <table className="table table-over">
             <thead>
                 <tr>
-                    <td>Numéro</td>
-                    <td >Client</td>
-                    <td className="text-center">Date d'envoi</td>
-                    <td className="text-center">Statut</td>
-                    <td className="text-center">Montant</td>
-                    <td className="text-center">Action</td>
+                    <th><div className="clickable" onClick={() => byChrono()}>Numéro</div></th>
+                    <th><div className="clickable text-center">Client</div></th>
+                    <th className="text-center"><div className="clickable" onClick={() => byDate()}>Date d'envoi</div></th>
+                    <th className="text-center"><div className="clickable" onClick={() => byStatus()}>Statut</div></th>
+                    <th className="text-center"><div className="clickable" onClick={() => byAmount()}>Montant</div></th>
+                    <th className="text-center">Actions</th>
                 </tr>
             </thead>
             {!loading && (
@@ -106,7 +126,7 @@ const InvoicesPage = (props) => {
                   <tr key={invoice.id}>
                     <td>{invoice.chrono}</td>
                     <td>
-                    <a href="#">{invoice.customer.firstname} {invoice.customer.lastname}</a>
+                    <Link to={"/client/" + invoice.customer.id}>{invoice.customer.firstname} {invoice.customer.lastname}</Link>
                     </td>
                     <td className="text-center">{new Date(invoice.sentAt).toLocaleDateString()}</td>
                     <td className="text-center">
