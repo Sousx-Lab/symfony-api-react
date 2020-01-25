@@ -70,22 +70,10 @@ const InvoicesPage = (props) => {
 
     // Sorted invoices functions //
     const originalInvoices = invoices.slice(0);
-    const byChrono = () => {
-        Sort.sortItems(originalInvoices, "chrono");
+    const order = (sortable) => {
+        Sort.sortItems(originalInvoices, sortable);
         setInvoices(originalInvoices);
-    };
-    const byDate = () => {
-        Sort.sortItems(originalInvoices, "sentAt");
-        setInvoices(originalInvoices);
-    };
-    const byStatus = () => {
-        Sort.sortItems(originalInvoices, "status");
-        setInvoices(originalInvoices);
-    };
-    const byAmount= () => {
-        Sort.sortItems(originalInvoices, "amount");
-        setInvoices(originalInvoices);
-    };
+    }
     //////End of Sorted invoices functions///////
 
     //Pagination //
@@ -112,11 +100,11 @@ const InvoicesPage = (props) => {
         <table className="table table-over">
             <thead>
                 <tr>
-                    <th><div className="clickable" onClick={() => byChrono()}>Numéro</div></th>
-                    <th><div className="clickable text-center">Client</div></th>
-                    <th className="text-center"><div className="clickable" onClick={() => byDate()}>Date d'envoi</div></th>
-                    <th className="text-center"><div className="clickable" onClick={() => byStatus()}>Statut</div></th>
-                    <th className="text-center"><div className="clickable" onClick={() => byAmount()}>Montant</div></th>
+                    <th><div className="clickable" onClick={() => order("chrono")}>Numéro</div></th>
+                    <th><div className="">Client</div></th>
+                    <th className="text-center"><div className="clickable" onClick={() => order("sentAt")}>Date d'envoi</div></th>
+                    <th className="text-center"><div className="clickable" onClick={() => order("status")}>Statut</div></th>
+                    <th className="text-center"><div className="clickable" onClick={() => order("amount")}>Montant</div></th>
                     <th className="text-center">Actions</th>
                 </tr>
             </thead>

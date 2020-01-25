@@ -51,30 +51,10 @@ const CustomersPage = props => {
   
   // Sorted customers functions //
   const originalCustomers = customers.slice(0);
-  const byFirstname = () => {
-    Sort.sortItems(originalCustomers, "firstname");
+  const order = (sortable) => {
+    Sort.sortItems(originalCustomers, sortable);
     setCustomers(originalCustomers);
   };
-  const byId = () =>{
-    Sort.sortItems(originalCustomers, "id");
-    setCustomers(originalCustomers);
-  };
-  const byInvoices = () =>{
-    Sort.sortItems(originalCustomers, "invoices");
-    setCustomers(originalCustomers);
-  }
-  const byTotal = () =>{
-    Sort.sortItems(originalCustomers, "totalAmount");
-    setCustomers(originalCustomers);
-  }
-  const byCompany = () =>{
-    Sort.sortItems(originalCustomers, "company");
-    setCustomers(originalCustomers);
-  }
-  const byEmail= () =>{
-    Sort.sortItems(originalCustomers, "email");
-    setCustomers(originalCustomers);
-  }
   //////End of Sorted customers functions////
 
   // Search filter //
@@ -109,12 +89,12 @@ const CustomersPage = props => {
       <table className="table table-hover">
         <thead>
           <tr>
-            <th><div className="clickable" onClick={() => byId()}>ID</div></th>  
-            <th><div className="clickable" onClick={() => byFirstname()}> Client</div></th>
-            <th><div className="clickable" onClick={() => byEmail()}> Email</div></th>
-            <th><div className="clickable" onClick={() => byCompany()}>Entreprise</div></th>  
-            <th className="text-center"><div className="clickable" onClick={() => byInvoices()}>Facture</div></th>
-            <th className="text-center"><div className="clickable" onClick={() => byTotal()}>Montant total</div></th>
+            <th><div className="clickable" onClick={() => order("id")}>ID</div></th>
+            <th><div className="clickable" onClick={() => order("firstname")}> Client</div></th>
+            <th><div className="clickable" onClick={() => order("email")}> Email</div></th>
+            <th><div className="clickable" onClick={() => order("company")}>Entreprise</div></th>  
+            <th className="text-center"><div className="clickable" onClick={() => order("invoices")}>Facture</div></th>
+            <th className="text-center"><div className="clickable" onClick={() => order("totalAmount")}>Montant total</div></th>
             <th className="text-center">Actions</th>
           </tr>
          </thead>
